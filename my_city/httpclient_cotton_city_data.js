@@ -5,7 +5,8 @@
 var http = require('http');
 
 var host = "localhost", port = 3000;
-var my_app_kit_id_city = "D9hvcj9oZh2Ao5dog";
+// var host = "mcotton.microduino.cn", port = 80;
+var device_id_city = "awtxeHsSGCgHr7yiQ";
 
 var now = new Date().getTime();
 
@@ -18,7 +19,7 @@ var jsonObject_citys = [
 ];
 
 postData = function (myAppKitId, jsonData) {
-    jsonData.my_app_kit_id = myAppKitId;
+    jsonData.device_id = myAppKitId;
 
     var jsonObject = JSON.stringify(jsonData);
 
@@ -57,5 +58,5 @@ postData = function (myAppKitId, jsonData) {
 };
 
 for (var j = 0; j < jsonObject_citys.length; j++) {
-    postData(my_app_kit_id_city, jsonObject_citys[j]);
+    postData(device_id_city, jsonObject_citys[j]);
 }

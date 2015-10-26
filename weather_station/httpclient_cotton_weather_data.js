@@ -5,23 +5,24 @@
 var http = require('http');
 
 var host = "localhost", port = 3000;
-var my_app_kit_id_weather = "erHPDhqSWuBPjq4b4";
+// var host = "mcotton.microduino.cn", port = 80;
+var device_id_weather = "32rN2SMg4j5oHcyey";
 
 var now = new Date().getTime();
 
 var jsonObject_weather = [
-    {Temperature: "22", Humidity: "50", Light: "1000", "Air Pressure": "100.00",
+    {Temperature: "22", Humidity: "50", Lightness: "1000", "Air Pressure": "100.00",
         "PM 2.5": "5.00", "Air Pollution": "3.00"},
-    {Temperature: "21", Humidity: "51", Light: "1002", "Air Pressure": "99.00"},
-    {Temperature: "20", Humidity: "52", Light: "1004", "Air Pressure": "98.00"},
-    {Temperature: "19", Humidity: "53", Light: "1006", "Air Pressure": "97.00"},
-    {Temperature: "18", Humidity: "54", Light: "1008", "Air Pressure": "96.00"},
-    {Temperature: "17", Humidity: "55", Light: "1010", "Air Pressure": "95.00"},
-    {Temperature: "16", Humidity: "56", Light: "1012", "Air Pressure": "94.00"},
+    {Temperature: "21", Humidity: "51", Lightness: "1002", "Air Pressure": "99.00"},
+    {Temperature: "20", Humidity: "52", Lightness: "1004", "Air Pressure": "98.00"},
+    {Temperature: "19", Humidity: "53", Lightness: "1006", "Air Pressure": "97.00"},
+    {Temperature: "18", Humidity: "54", Lightness: "1008", "Air Pressure": "96.00"},
+    {Temperature: "17", Humidity: "55", Lightness: "1010", "Air Pressure": "95.00"},
+    {Temperature: "16", Humidity: "56", Lightness: "1012", "Air Pressure": "94.00"},
 ];
 
 postData = function (myAppKitId, jsonData) {
-    jsonData.my_app_kit_id = myAppKitId;
+    jsonData.device_id = myAppKitId;
 
     var jsonObject = JSON.stringify(jsonData);
 
@@ -61,5 +62,5 @@ postData = function (myAppKitId, jsonData) {
 
 
 for (var i = 0; i < jsonObject_weather.length; i++) {
-    postData(my_app_kit_id_weather, jsonObject_weather[i]);
+    postData(device_id_weather, jsonObject_weather[i]);
 }
