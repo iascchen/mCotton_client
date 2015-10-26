@@ -4,7 +4,7 @@ var ddpclient = new DDPClient({
     url: 'ws://192.168.199.240:3000/websocket'
 });
 
-var my_app_kit_id = "kHu75PXky6azzFyjL";
+var device_id = "32rN2SMg4j5oHcyey";
 
 /*
  * Connect to the Meteor Server
@@ -29,7 +29,7 @@ ddpclient.connect(function (error, wasReconnect) {
      */
     ddpclient.subscribe(
         "datamessages",                  // name of Meteor Publish function to subscribe to
-         [],                       // any parameters used by the Publish function
+        [],                       // any parameters used by the Publish function
         function () {             // callback when the subscription is complete
             console.log("datamessages complete:");
             console.log(ddpclient.collections.datamessages);
@@ -58,20 +58,45 @@ ddpclient.connect(function (error, wasReconnect) {
 
     var message = ddpclient.call(
         'dataMessageInsert',
-        [{my_app_kit_id: my_app_kit_id, tem: "16", hum:"50"}],
+        [{device_id: device_id, Temperature: "16", Humidity: "50", Test: "5"}],
         function (err, result) {
-            // console.log('dataEventInsert, error: ' + error);
+            console.log('dataMessageInsert, error: ' + err);
             console.log('dataMessageInsert, result: ' + result._id);
+        },
+        function () {              // callback which fires when server has finished
+            console.log('Inserted');  // sending any updated documents as a result of
+            // console.log(ddpclient.collections.controlevents);  // calling this method
+
+            ddpclient.call(
+                'dataEventsQuery',
+                [{
+                    device_id: device_id
+                }]
+                , function (err, result) {
+                    console.log('dataEventsQuery, error: ' + err);
+                    console.log('dataEventsQuery, result: ' + JSON.stringify(result));
+                }
+            );
+
+            ddpclient.call(
+                'dataEventsQuerySmall',
+                [{
+                    device_id: device_id
+                }]
+                , function (err, result) {
+                    console.log('dataEventsQuerySmall, error: ' + err);
+                    console.log('dataEventsQuerySmall, result: ' + JSON.stringify(result));
+                }
+            );
         }
     );
 
     //Debug information
-
-    ddpclient.on('message', function (msg) {
-        console.log("ddp message: " + msg);
-    });
-
     /*
+     ddpclient.on('message', function (msg) {
+     console.log("ddp message: " + msg);
+     });
+
      ddpclient.on('socket-close', function (code, message) {
      console.log("Close: %s %s", code, message);
      });

@@ -1,10 +1,13 @@
+//TODO
+
 var DDPClient = require("ddp"),
     Cylon = require('cylon');
     _ = require('underscore');
 
 var ddpclient = new DDPClient({
-    // url: 'ws://192.168.199.240:3000/websocket'
-    url: 'ws://mcotton-01.chinacloudapp.cn/websocket'
+    url: 'ws://192.168.199.240:3000/websocket'
+    // url: 'ws://mcotton.microduino.cn/websocket'
+    // url: 'ws://mcotton-01.chinacloudapp.cn/websocket'
 });
 
 var useremail = "iasc@163.com";
@@ -12,7 +15,7 @@ var pwd = "123456";
 
 var user_id = null, token = null;
 
-var appkit_weather_station, myappkit_weather_station, my_app_kit_id;
+var appkit_weather_station, myappkit_weather_station, device_id;
 var data_observer, control_observer;
 
 /*
@@ -43,20 +46,20 @@ ddpclient.connect(function (error, wasReconnect) {
         if (token) {
             console.log("Logined!", user_id, token);
 
-            //var observer = ddpclient.observe("appkits");
+            //var observer = ddpclient.observe("devices");
 
             /*
              * Subscribe to a Meteor Collection
              */
             ddpclient.subscribe(
-                "appkits",                  // name of Meteor Publish function to subscribe to
+                "devices",                  // name of Meteor Publish function to subscribe to
                 [],                       // any parameters used by the Publish function
                 function () {             // callback when the subscription is complete
-                    console.log("appkits all ==> ", ddpclient.collections.appkits);
+                    console.log("devices all ==> ", ddpclient.collections.appkits);
 
                     appkit_weather_station = _(ddpclient.collections.appkits).findWhere({name: 'Weather Station'});
-                    console.log("appkits weather_station  ==> ", appkit_weather_station);
-                    console.log("appkits weather_station id ==> ", appkit_weather_station._id);
+                    console.log("devices weather_station  ==> ", appkit_weather_station);
+                    console.log("devices weather_station id ==> ", appkit_weather_station._id);
 
                     // Create myAppKit
 
@@ -70,7 +73,7 @@ ddpclient.connect(function (error, wasReconnect) {
                             console.log('myAppKitInsert, error: ' + error);
                             console.log('myAppKitInsert, result: ' + result._id);
 
-                            my_app_kit_id = result._id;
+                            device_id = result._id;
 
                             /*
                              * Subscribe to a Meteor Collection
@@ -81,9 +84,9 @@ ddpclient.connect(function (error, wasReconnect) {
                                 function () {             // callback when the subscription is complete
                                     console.log("myappkits all ==> ", ddpclient.collections.myappkits);
 
-                                    console.log("appkit_weather_station id ==> ", appkit_weather_station._id);
+                                    console.log("project_weather_station id ==> ", appkit_weather_station._id);
 
-                                    myappkit_weather_station = _(ddpclient.collections.myappkits).filter({_id: my_app_kit_id});
+                                    myappkit_weather_station = _(ddpclient.collections.myappkits).filter({_id: device_id});
                                     console.log("myappkits weather_station  ==> ", myappkit_weather_station);
                                 }
                             );
@@ -134,7 +137,7 @@ ddpclient.connect(function (error, wasReconnect) {
                             var newControlEvent = ddpclient.call(
                                 'controlEventInsert',
                                 [{
-                                    my_app_kit_id: my_app_kit_id,
+                                    device_id: device_id,
                                     control_name: "Status",
                                     control_value: "true"
                                 }],
